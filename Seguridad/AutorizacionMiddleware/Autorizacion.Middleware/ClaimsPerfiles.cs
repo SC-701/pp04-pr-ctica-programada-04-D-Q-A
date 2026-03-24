@@ -17,6 +17,7 @@ namespace Autorizacion.Middleware
     public class ClaimsPerfiles
     {
 
+
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
         private IAutorizacionBW _autorizacionBW;
