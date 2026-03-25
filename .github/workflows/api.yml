@@ -47,7 +47,7 @@ jobs:
           dotnet restore "DA/DA.csproj"
           dotnet restore "Flujo/Flujo.csproj"
           dotnet restore "Reglas/Reglas.csproj"
-          dotnet restore "Helpers/Helpers.csproj
+          dotnet restore "Helpers/Helpers.csproj"
           dotnet restore "API/API.csproj"
 
       - name: Compilar
