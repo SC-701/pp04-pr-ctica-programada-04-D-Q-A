@@ -76,7 +76,7 @@ namespace Autorizacion.Middleware
 
         private async Task<IEnumerable<Perfil>> obtenerInformacionPerfiles(HttpContext httpContext)
         {
-            return await _autorizacionBW.ObtenerPerfilesxUsuario(new AutorizacionAbstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == "usuario").FirstOrDefault().Value });
+            return await _autorizacionBW.ObtenerPerfilesxUsuario(new AutorizacionAbstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == "perfil").FirstOrDefault().Value });
         }
 
     }
