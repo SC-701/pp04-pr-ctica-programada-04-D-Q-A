@@ -13,7 +13,7 @@ namespace Abstracciones.Modelos
         [Required]
         public string NombreUsuario { get; set; }
         [Required]
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; } = "0";
         [Required]
         [EmailAddress]
         public string CorreoElectronico { get; set; }

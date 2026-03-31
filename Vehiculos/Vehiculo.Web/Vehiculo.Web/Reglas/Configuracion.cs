@@ -17,7 +17,7 @@ namespace Reglas
         {
             string? UrlBase = ObtenerUrlBase(seccion);
             var Metodo = _configuration.GetSection(seccion).Get<ApiEndPoint>().Metodos.Where(m=>m.Nombre==nombre).FirstOrDefault().Valor;
-            return $"{UrlBase}/{Metodo}";
+            return $"{UrlBase}{Metodo}";
         }
 
         public string ObtenerValor(string llave)

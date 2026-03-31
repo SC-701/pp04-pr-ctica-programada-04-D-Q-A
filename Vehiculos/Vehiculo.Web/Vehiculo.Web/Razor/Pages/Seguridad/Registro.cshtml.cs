@@ -21,11 +21,10 @@ namespace Web.Pages.Cuenta
 
         public async Task<IActionResult> OnPost()
         {
-            if (!ModelState.IsValid) return Page();
-
             var hash = Autenticacion.GenerarHash(usuario.Password);
             usuario.PasswordHash = Autenticacion.ObtenerHash(hash);
-
+            if (!ModelState.IsValid) return Page();
+            
             string endpoint = _configuracion.ObtenerMetodo("ApiEndPointsSeguridad", "Registro");
             var cliente = new HttpClient();
             var respuesta = await cliente.PostAsJsonAsync<Usuario>(endpoint, usuario);
