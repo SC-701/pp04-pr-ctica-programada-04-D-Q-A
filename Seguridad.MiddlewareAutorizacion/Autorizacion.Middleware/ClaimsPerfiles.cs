@@ -1,6 +1,5 @@
-﻿
-using AutorizacionAbstracciones.BW;
-using AutorizacionAbstracciones.Modelos;
+﻿using Autorizacion.Abstracciones.Flujo;
+using Autorizacion.Abstracciones.Modelos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +16,9 @@ namespace Autorizacion.Middleware
     public class ClaimsPerfiles
     {
 
-
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
-        private IAutorizacionBW _autorizacionBW;
+        private IAutorizacionFlujo _autorizacionFlujo;
 
         public ClaimsPerfiles(RequestDelegate next, IConfiguration configuration)
         {
@@ -28,9 +26,9 @@ namespace Autorizacion.Middleware
             _configuration = configuration;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext, IAutorizacionBW autorizacionBW)
+        public async Task InvokeAsync(HttpContext httpContext, IAutorizacionFlujo autorizacionFlujo)
         { 
-            _autorizacionBW = autorizacionBW;
+        _autorizacionFlujo = autorizacionFlujo;
             ClaimsIdentity appIdentity = await verificarAutorizacion(httpContext);
             httpContext.User.AddIdentity(appIdentity);
             await _next(httpContext);
@@ -41,27 +39,10 @@ namespace Autorizacion.Middleware
            var claims=new List<Claim>();
             if (httpContext.User != null && httpContext.User.Identity.IsAuthenticated)
             {                
-                await ObtenerUsuario(httpContext, claims);
                 await ObtenerPerfiles(httpContext, claims);
             }
             var appIdentity=new ClaimsIdentity(claims);
             return appIdentity;
-        }
-
-        private async Task ObtenerUsuario(HttpContext httpContext, List<Claim> claims)
-        {
-            var  usuario = await ObtenerInformacionUsuario(httpContext);
-            if (usuario is not null && !string.IsNullOrEmpty(usuario.Id.ToString()) && !string.IsNullOrEmpty(usuario.NombreUsuario.ToString()) && !string.IsNullOrEmpty(usuario.CorreoElectronico.ToString()));
-            {
-                claims.Add(new Claim(ClaimTypes.Email, usuario.CorreoElectronico));
-                claims.Add(new Claim(ClaimTypes.Name, usuario.NombreUsuario));
-                claims.Add(new Claim("IdUsuario", usuario.Id.ToString()));
-            }
-        }
-
-        private async Task<Usuario> ObtenerInformacionUsuario(HttpContext httpContext)
-        {
-            return await _autorizacionBW.ObtenerUsuario(new AutorizacionAbstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == "usuario").FirstOrDefault().Value });
         }
 
         private async Task ObtenerPerfiles(HttpContext httpContext, List<Claim> claims)
@@ -76,7 +57,7 @@ namespace Autorizacion.Middleware
 
         private async Task<IEnumerable<Perfil>> obtenerInformacionPerfiles(HttpContext httpContext)
         {
-            return await _autorizacionBW.ObtenerPerfilesxUsuario(new AutorizacionAbstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == "perfil").FirstOrDefault().Value });
+            return await _autorizacionFlujo.ObtenerPerfilesxUsuario(new Abstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault().Value });
         }
 
     }
