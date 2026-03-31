@@ -38,13 +38,29 @@ namespace Autorizacion.Middleware
         {
            var claims=new List<Claim>();
             if (httpContext.User != null && httpContext.User.Identity.IsAuthenticated)
-            {                
+            {
+                await ObtenerUsuario(httpContext, claims);
                 await ObtenerPerfiles(httpContext, claims);
             }
             var appIdentity=new ClaimsIdentity(claims);
             return appIdentity;
         }
 
+        private async Task ObtenerUsuario(HttpContext httpContext, List<Claim> claims)
+        {
+            var usuario = await ObtenerInformacionUsuario(httpContext);
+            if (usuario is not null && !string.IsNullOrEmpty(usuario.Id.ToString()) && !string.IsNullOrEmpty(usuario.NombreUsuario.ToString()) && !string.IsNullOrEmpty(usuario.CorreoElectronico.ToString())) ;
+            {
+                claims.Add(new Claim(ClaimTypes.Email, usuario.CorreoElectronico));
+                claims.Add(new Claim(ClaimTypes.Name, usuario.NombreUsuario));
+                claims.Add(new Claim("IdUsuario", usuario.Id.ToString()));
+            }
+        }
+
+        private async Task<Usuario> ObtenerInformacionUsuario(HttpContext httpContext)
+        {
+            return await _autorizacionFlujo.ObtenerUsuario(new Abstracciones.Modelos.Usuario { NombreUsuario = httpContext.User.Claims.Where(c => c.Type == "usuario").FirstOrDefault().Value });
+        }
         private async Task ObtenerPerfiles(HttpContext httpContext, List<Claim> claims)
         {
             var perfiles = await obtenerInformacionPerfiles(httpContext);

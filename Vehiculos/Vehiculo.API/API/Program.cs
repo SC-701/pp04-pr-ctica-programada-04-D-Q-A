@@ -4,15 +4,16 @@ using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Interfaces.Servicios;
 using Abstracciones.Modelos;
+using Autorizacion.Middleware;
 using DA;
 using DA.Repositorio;
 using Flujo;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Reglas;
 using Servicios;
-using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Text;
-using Autorizacion.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.AutorizacionClaims();
+
+app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
