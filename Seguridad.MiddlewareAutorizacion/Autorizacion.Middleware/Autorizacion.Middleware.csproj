@@ -17,9 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Abstracciones.BW\Autorizacion.BW.csproj" />
 		<ProjectReference Include="..\Autorizacion.DA\Autorizacion.DA.csproj" />
-		<ProjectReference Include="..\AutorizacionAbstracciones\Autorizacion.Abstracciones.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
