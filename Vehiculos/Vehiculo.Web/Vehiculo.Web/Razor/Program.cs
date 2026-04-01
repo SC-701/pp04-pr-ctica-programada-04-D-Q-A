@@ -19,8 +19,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Seguridad/Login";
         options.LogoutPath = "/Seguridad/Logout";
-        options.AccessDeniedPath = "/Seguridad/Acceso";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+        options.AccessDeniedPath = "/Seguridad/AccesoDenegado";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
     });
 
 // ★ Servicios del paquete NuGet de autorización (para AutorizacionClaims)

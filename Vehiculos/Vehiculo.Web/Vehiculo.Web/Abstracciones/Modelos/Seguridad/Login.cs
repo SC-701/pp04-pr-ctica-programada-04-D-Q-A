@@ -1,31 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// NUEVO: Abstracciones/Modelos/Seguridad/Login.cs
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Abstracciones.Modelos.Seguridad
 {
     public class Login
     {
-        [Required]
-        public string NombreUsuario { get; set; }
-        [Required]
-        public string PasswordHash { get; set; }
-        [Required]
-        [EmailAddress]
-        public string CorreoElectronico { get; set; }
-    }
-    public class LoginResponse : Login
-    {
-        [Required]
-        public Guid Id { get; set; }
-    }
+        [Required(ErrorMessage = "El correo es requerido")]
+        [EmailAddress(ErrorMessage = "Formato de correo inválido")]
+        public string Correo { get; set; }
 
-    public class LoginRequest : Login
-    {
-        [Required]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "La contraseña es requerida")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Mínimo 8 caracteres")]
+        public string Contrasena { get; set; }
     }
 }

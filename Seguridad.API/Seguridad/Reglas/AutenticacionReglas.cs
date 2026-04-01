@@ -68,6 +68,20 @@ namespace Reglas
             return claims;
         }
 
+        public static ClaimsIdentity GenerarClaims(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var claims = jwtToken.Claims.ToList();
+
+            // Agregar el token completo como claim para enviarlo después al API
+            claims.Add(new Claim("AccessToken", token));
+
+            return new ClaimsIdentity(
+                claims,
+                Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
         private async Task<IEnumerable<Perfil>> ObtenerPerfiles(LoginResponse login)
         {
             return await _usuarioDA.ObtenerPerfilesxUsuario(new Usuario { NombreUsuario = login.NombreUsuario, CorreoElectronico = login.CorreoElectronico });
