@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Interfaces.API;
 using Abstracciones.Interfaces.Flujo;
 using Flujo;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +8,6 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]                              // ★
-
     public class MarcaController : ControllerBase, IMarcaController
     {
         private IMarcaFlujo _marcaFlujo;
@@ -23,7 +20,6 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "1")]
         public async Task<IActionResult> Obtener()
         {
             var resultado = await _marcaFlujo.Obtener();
